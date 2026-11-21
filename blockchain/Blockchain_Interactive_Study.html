@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blockchain Technology: Interactive Study Notes</title>
+<style>
+  :root{
+  --bg:#000000; --surface:#111111; --text:#eeeeee; --muted:#9a9a9a; --border:#2b2b2b;
+  --accent:#3dd9c5; --accent-soft:#0f2a27;
+  --blue:#ff9e5e; --blue-soft:#2a1d12;
+  --green:#7ee08a; --green-soft:#132a18;
+  --red:#ff7b8a; --red-soft:#2e1419;
+  --amber:#ffd166; --amber-soft:#2e2611;
+  --violet:#b98cff; --pink:#ff6fb5; --sky:#ff9e5e;
+  color-scheme:dark;
+}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:14px}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.6;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+  .layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+  aside{position:sticky;top:0;height:100vh;overflow:auto;background:var(--surface);border-right:1px solid var(--border);padding:16px 14px}
+  aside h1{font-size:1rem;margin:0 0 4px;color:var(--accent)}
+  aside p.small{font-size:.8rem;color:var(--muted);margin:0 0 12px}
+  a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+  aside a{text-decoration:none;display:block;color:var(--text);text-decoration:none;padding:5px 8px;border-radius:6px;font-size:.88rem}
+  aside a:hover{background:var(--accent-soft)}
+  aside a.active{background:var(--accent-soft);color:var(--accent);font-weight:600;border-left:3px solid var(--accent)}
+  aside{align-self:start}
+  aside .unit{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:12px 8px 4px}
+  .prog{font-size:.85rem;margin:10px 0;padding:8px;background:var(--bg);border-radius:8px}
+  .prog .bar{height:6px;background:var(--border);border-radius:4px;overflow:hidden;margin-top:4px}
+  .prog .bar i{display:block;height:100%;background:var(--green);width:0;transition:width .3s}
+  main{padding:18px clamp(14px,3vw,40px) 60px;max-width:1000px}
+  header.hero{background:var(--accent);color:#fff;border-radius:14px;padding:22px 24px;margin-bottom:18px}
+  header.hero h2{margin:0 0 6px;font-size:1.5rem}
+  header.hero p{margin:0;opacity:.92}
+  h1.unit-h{font-size:1.25rem;color:var(--accent);border-bottom:2px solid var(--accent);padding-bottom:4px;margin:34px 0 14px}
+
+  main h1.unit-h:nth-of-type(1){color:var(--accent);border-bottom-color:var(--accent)}
+  main h1.unit-h:nth-of-type(2){color:var(--violet);border-bottom-color:var(--violet)}
+  main h1.unit-h:nth-of-type(3){color:var(--sky);border-bottom-color:var(--sky)}
+  main h1.unit-h:nth-of-type(4){color:var(--green);border-bottom-color:var(--green)}
+  main h1.unit-h:nth-of-type(5){color:var(--amber);border-bottom-color:var(--amber)}
+  main h1.unit-h:nth-of-type(6){color:var(--pink);border-bottom-color:var(--pink)}
+  section.sec{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:18px}
+  section.sec h3{margin:0 0 8px;font-size:1.15rem;color:var(--accent)}
+  section.sec h4{margin:16px 0 6px;font-size:.95rem}
+  p{margin:6px 0}
+  ul,ol{margin:6px 0;padding-left:22px} li{margin:3px 0}
+  table{width:100%;border-collapse:collapse;font-size:.88rem;margin:8px 0}
+  th,td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top}
+  th{background:var(--accent-soft)}
+  .def{border-left:4px solid var(--blue);background:var(--blue-soft);padding:8px 12px;border-radius:6px;margin:8px 0}
+  .exam{border-left:4px solid var(--accent);background:var(--accent-soft);padding:8px 12px;border-radius:6px;margin:8px 0}
+  .warn{border-left:4px solid var(--amber);background:var(--amber-soft);padding:8px 12px;border-radius:6px;margin:8px 0}
+  .small{font-size:.8rem;color:var(--muted)}
+  .lab{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .panel{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px;margin:10px 0}
+  .panel h4{margin-top:0}
+  button{font:inherit;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:7px 14px;cursor:pointer;margin:3px 4px 3px 0}
+  button.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+  button:disabled{opacity:.4;cursor:default}
+  input[type=text],select{font:inherit;padding:6px 8px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text)}
+  input[type=range]{width:100%;accent-color:var(--accent)}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .grow{flex:1;min-width:200px}
+  .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;word-break:break-all}
+  /* diagrams */
+  .diag{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;justify-content:center;margin:10px 0}
+  .box{background:var(--surface);border:2px solid var(--blue);border-radius:10px;padding:8px 10px;min-width:110px;text-align:center;font-size:.85rem}
+  .box.red{border-color:var(--accent)} .box.green{border-color:var(--green)} .box.amber{border-color:var(--amber)} .box.grey{border-color:var(--muted)}
+  .box b{display:block;margin-bottom:2px}
+  .arrow{align-self:center;font-size:1.3rem;color:var(--muted)}
+  .stack{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+  .stack .box{width:100%}
+  .hl{background:var(--amber-soft)!important;border-color:var(--amber)!important;transform:scale(1.02);transition:all .2s}
+  .bad{background:var(--red-soft)!important;border-color:var(--red)!important}
+  .ok{background:var(--green-soft)!important;border-color:var(--green)!important}
+  .chain{display:flex;gap:10px;overflow-x:auto;padding:6px 2px 10px}
+  .blk{min-width:200px;background:var(--surface);border:2px solid var(--green);border-radius:10px;padding:8px;font-size:.8rem}
+  .blk.broken{border-color:var(--red);background:var(--red-soft)}
+  .blk input{width:100%}
+  .blk .lbl{font-size:.7rem;color:var(--muted);margin-top:4px}
+  .nodes{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+  .node{width:86px;height:86px;border-radius:50%;border:3px solid var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;background:var(--surface);transition:all .25s}
+  .node.faulty{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+  .node.primary{box-shadow:0 0 0 3px var(--amber)}
+  .merkle{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .mlev{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .mnode{border:2px solid var(--blue);border-radius:8px;padding:5px 8px;font-size:.78rem;min-width:110px;text-align:center;background:var(--surface)}
+  .mnode.root{border-color:var(--accent)}
+  .bar-chart{display:flex;align-items:flex-end;gap:18px;height:200px;padding:10px;justify-content:center}
+  .bar{width:70px;background:var(--green);border-radius:6px 6px 0 0;display:flex;align-items:flex-end;justify-content:center;color:#fff;font-size:.75rem;padding-bottom:4px;transition:height .4s}
+  .bar.hi{background:var(--accent)}
+  .bar-wrap{display:flex;flex-direction:column;align-items:center;font-size:.8rem;gap:4px}
+  .triangle-box{text-align:center}
+  .qz{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:10px 0;background:var(--bg)}
+  .qz .opts button{display:block;width:100%;text-align:left;background:var(--surface);color:var(--text);border:1px solid var(--border);margin:4px 0}
+  .qz .opts button:hover{background:var(--accent-soft)}
+  .qz .opts button.right{background:var(--green-soft);border-color:var(--green)}
+  .qz .opts button.wrongc{background:var(--red-soft);border-color:var(--red)}
+  .qz .fb{font-size:.9rem;min-height:1.3em;margin-top:6px}
+  .flip{perspective:800px;min-height:110px;cursor:pointer;margin:6px;display:inline-block;width:100%;max-width:300px;vertical-align:top}
+  .flip .inner{position:relative;width:100%;min-height:110px;transition:transform .45s;transform-style:preserve-3d}
+  .flip.on .inner{transform:rotateY(180deg)}
+  .flip .f,.flip .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.9rem;border:1px solid var(--border)}
+  .flip .f{background:var(--surface);font-weight:600}
+  .flip .b{background:var(--blue-soft);transform:rotateY(180deg)}
+  .flipwrap{display:flex;flex-wrap:wrap;gap:8px}
+  .sub{font-size:.8rem;color:var(--muted)}
+  .stepper .dots{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+  .stepper .dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;cursor:pointer;background:var(--surface)}
+  .stepper .dot.cur{border-color:var(--accent);background:var(--accent);color:#fff}
+  .stepper .dot.past{border-color:var(--green)}
+  .stepper .stp{font-weight:700;margin:4px 0}
+  .stepper .stxt{min-height:48px}
+  details.hint{margin-top:8px} details.hint summary{cursor:pointer;color:var(--accent);font-size:.9rem}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;padding:24px 0}
+  @media (max-width:820px){.layout{grid-template-columns:1fr} aside{position:static;height:auto}}
+  @media print{aside,button{display:none} .layout{display:block}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <h1>Blockchain Blockchain Technology</h1>
+  <p class="small">Interactive study guide. Diagrams, simulators and quizzes for every PDF topic.</p>
+  <div class="prog">Sections finished: <span id="progTxt">0 / 0</span><div class="bar"><i id="progBar"></i></div></div>
+  <a href="#s-intro">Start here</a><a href="#path">Study path</a>
+  <div class="unit">Unit 1</div>
+  <a href="#s1">1 Systems and DLT</a><a href="#s2">2 Blockchain types</a><a href="#s3">3 Block structure and tampering</a><a href="#s4">4 Hashing</a><a href="#s5">5 Merkle trees</a><a href="#s6">6 Digital signatures</a><a href="#s7">7 Proof of Work and mining</a><a href="#s8">8 PBFT and fault tolerance</a><a href="#s9">9 PoS, DPoS, PoA</a><a href="#s10">10 Trilemma, tokens, Web3</a>
+  <div class="unit">Unit 2</div>
+  <a href="#s11">11 Bitcoin basics and supply</a><a href="#s12">12 UTXO and fees</a><a href="#s13">13 Transaction lifecycle</a><a href="#s14">14 Bitcoin Script (P2PKH)</a>
+  <div class="unit">Unit 3</div>
+  <a href="#s15">15 Ethereum, gas, accounts</a><a href="#s16">16 DApps and ecosystem</a><a href="#s17">17 Solidity essentials</a><a href="#s18">18 DApp architecture</a><a href="#s19">19 Deployment and ERC-20</a><a href="#s20">20 Layer 2 scaling</a><a href="#s21">21 Interoperability and bridges</a><a href="#s22">22 Zero-knowledge proofs</a><a href="#s23">23 DID and SSI</a>
+  <div class="unit">Unit 4</div>
+  <a href="#s24">24 Hyperledger Fabric</a><a href="#s25">25 Chaincode and lifecycle</a><a href="#s26">26 BaaS and Caliper</a>
+  <div class="unit">Unit 5</div>
+  <a href="#s27">27 AI, IoT, federated learning</a><a href="#s28">28 Green blockchain</a><a href="#s29">29 Case studies</a><a href="#s30">30 Trends and careers</a>
+  <div class="unit">Practice</div>
+  <a href="#s31">31 Mixed exam bank</a>
+</aside>
+
+<main>
+<header class="hero" id="s-intro">
+  <h2>Blockchain Technology: Interactive Study Notes</h2>
+  <p>Course notes covering all topics, with diagrams, interactive simulators and self-assessment quizzes. Use "Mark finished" at the end of each section to track your progress.</p>
+</header>
+
+<section class="sec" id="path" style="border-left:5px solid var(--pink)">
+  <h3>Study path (follow in order)</h3>
+  <p class="small">Estimated times are approximate. Tick each step when you finish it.</p>
+  <ol style="line-height:2">
+    <li><a href="#s1">Systems and DLT</a> with <a href="#s2">types of blockchain</a>: about 1 hour</li>
+    <li><a href="#s3">Block structure</a>, <a href="#s4">hashing</a>, <a href="#s5">Merkle trees</a>, <a href="#s6">digital signatures</a>: about 3 hours</li>
+    <li><a href="#s7">Proof of Work</a>, <a href="#s8">PBFT</a>, <a href="#s9">PoS and others</a>, <a href="#s10">trilemma and Web3</a>: about 3 hours</li>
+    <li><a href="#s11">Bitcoin basics</a>, <a href="#s12">UTXO</a>, <a href="#s13">transactions</a>, <a href="#s14">Script</a>: about 3 hours</li>
+    <li><a href="#s15">Ether and gas</a>, <a href="#s16">DApps</a>, <a href="#s17">Solidity</a>: about 4 hours</li>
+    <li><a href="#s18">DApp architecture</a> and <a href="#s19">deployment and ERC-20</a>: about 3 hours</li>
+    <li><a href="#s20">Layer 2</a>, <a href="#s21">interoperability</a>, <a href="#s22">zero-knowledge proofs</a>, <a href="#s23">DID and SSI</a>: about 4 hours</li>
+    <li><a href="#s24">Hyperledger Fabric</a>, <a href="#s25">chaincode</a>, <a href="#s26">BaaS and Caliper</a>: about 3 hours</li>
+    <li><a href="#s27">AI, IoT and federated learning</a>, <a href="#s28">green blockchain</a>, <a href="#s29">case studies</a>, <a href="#s30">trends and careers</a>: about 2 hours</li>
+    <li><a href="#s31">Mixed exam bank</a>: score at least 8 of 10 twice before the exam</li>
+  </ol>
+  <label class="small"><input type="checkbox" class="done"> Mark path finished</label>
+</section>
+<div class="panel" style="position:sticky;top:0;z-index:5">
+  <div class="row">
+    <div>Region: <select id="region"><option value="intl" selected>International (US$)</option><option value="in">India (₹ INR)</option></select></div>
+    <div>Rate: 1 USD = ₹ <input type="text" id="fx" value="85" style="width:80px"></div>
+    <div class="grow"><input type="text" id="search" placeholder="Search topics (e.g. Merkle, gas, Raft)" style="width:100%"></div>
+  </div>
+  <p class="small">The exchange rate is a placeholder. Update it to today's rate. Money amounts on this page convert automatically.</p>
+</div>
+
+
+<!-- ============ UNIT 1 ============ -->
+<h1 class="unit-h">Unit 1: Blockchain Foundations</h1>
+
+<section class="sec" id="s1" style="border-left:5px solid var(--accent)">
+  <h3>1. Centralized, decentralized and distributed systems</h3>
+  <div class="def"><b>Centralized and decentralized</b> describe who controls the system. <b>Distributed</b> describes how work and data are spread over several computers. The three are independent: a system can be distributed but centrally controlled.</div>
+  <div class="diag">
+    <div class="box red" style="min-width:200px"><b>Centralized</b>One server holds everything.<br>All nodes depend on the centre.<br><span class="small">Example: bank database, Gmail</span></div>
+    <div class="box amber" style="min-width:200px"><b>Decentralized</b>Several independent authorities share control.<br><span class="small">Example: consortium of banks</span></div>
+    <div class="box green" style="min-width:200px"><b>Distributed</b>Work spread over networked computers.<br><span class="small">Example: Google Search, Hadoop</span></div>
+  </div>
+  <div class="exam">Google Search is distributed but centralized in control. Bitcoin is both distributed and decentralized.</div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q1"></div></div>
+  <details class="hint"><summary>Why does this matter?</summary><p>Exam questions often ask you to classify a system and justify it. Use the four steps: who decides, where the data is, whether work is networked, and what happens when one machine fails.</p></details>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s2" style="border-left:5px solid var(--accent)">
+  <h3>2. Types of blockchain</h3>
+  <p>Ask two questions: <b>who can join</b> (anyone, or only invited members?) and <b>who governs</b> (the community, one organisation, or several?).</p>
+  <div class="diag">
+    <div class="box"><b>Public</b>Anyone joins<br>Community governs<br>Bitcoin, Ethereum</div>
+    <div class="box"><b>Private</b>One organisation<br>Authorised users only<br>Hyperledger Fabric (per notes §2.3), Quorum</div>
+    <div class="box"><b>Consortium</b>Several known organisations<br>Shared governance<br>R3 Corda, IBM Food Trust</div>
+    <div class="box"><b>Hybrid</b>Public verification<br>+ private data<br>XDC Network, LTO</div>
+  </div>
+  <div class="warn">Private and consortium are both permissioned. Hybrid is not just a restricted public chain. Blockchain_Notes §2.6 leaves hybrid out of its summary table.</div>
+  <div class="panel"><div class="lab">Classify these scenarios</div><div id="q2"></div></div>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s3" style="border-left:5px solid var(--accent)">
+  <h3>3. Block structure and tamper detection (interactive)</h3>
+  <p>Each block stores its own data and the hash of the previous block. Change any block's data below and watch the chain break. The hash function here is a <b>toy hash for teaching</b>, not SHA-256, but the linking logic is the same.</p>
+  <div class="diag">
+    <div class="box"><b>Block header</b>Version · Previous hash · Merkle root · Timestamp · Difficulty target · Nonce</div>
+    <div class="arrow">+</div>
+    <div class="box"><b>Block body</b>List of transactions</div>
+  </div>
+  <div class="row"><button id="fixChain" class="alt">Attacker recomputes every link</button><button id="resetChain" class="alt">Reset chain</button></div>
+  <div class="chain" id="chainBox"></div>
+  <p class="small" id="chainMsg"></p>
+  <div class="exam">Changing one block breaks the link from the next block onward. To hide the change, an attacker must recompute every later block, which costs work. This is why an altered history is detectable and expensive to rewrite.</div>
+  <p class="small"><b>Read more:</b> <a href="https://bitcoin.org/bitcoin.pdf" target="_blank" rel="noopener">Bitcoin whitepaper (original design)</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s4" style="border-left:5px solid var(--accent)">
+  <h3>4. Hashing and the avalanche effect</h3>
+  <div class="def"><b>Hash function:</b> any input in, fixed-size digest out. Deterministic, fast, pre-image resistant, collision resistant, and shows the avalanche effect. SHA-256 and Keccak-256 give 256-bit (32-byte) outputs.</div>
+  <div class="panel">
+    <div class="lab">Interactive avalanche demo (toy hash)</div>
+    <input type="text" id="hashIn" class="grow" value="Pay Bob 0.5 BTC" style="width:100%">
+    <p class="mono" id="hashOut"></p>
+    <p class="small" id="hashDiff"></p>
+  </div>
+  <div class="flipwrap" id="flashHash"></div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q4"></div></div>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s5" style="border-left:5px solid var(--accent)">
+  <h3>5. Merkle trees (interactive)</h3>
+  <p>Four transactions are hashed in pairs up to one <b>Merkle root</b>. Edit any transaction. The root changes, which is how tampering shows up.</p>
+  <div class="panel">
+    <div class="row">
+      <input type="text" class="tx grow" value="T1: Alice to Bob 100">
+      <input type="text" class="tx grow" value="T2: Bob to Carol 50">
+    </div>
+    <div class="row">
+      <input type="text" class="tx grow" value="T3: David to Eve 200">
+      <input type="text" class="tx grow" value="T4: Eve to Frank 75">
+    </div>
+  </div>
+  <div class="merkle" id="merkleBox"></div>
+  <div class="exam">Verification trick: rebuild the tree from the data and compare roots. Matching roots mean the whole data set matches, without checking every transaction. Four transactions give 2 levels above the leaves.</div>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s6" style="border-left:5px solid var(--accent)">
+  <h3>6. Digital signatures (step through)</h3>
+  <div class="def"><b>Digital signature:</b> made with the private key, verified with the public key. Gives authentication, integrity and non-repudiation.</div>
+  <div id="stepSig" class="stepper"></div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q6"></div></div>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s7" style="border-left:5px solid var(--accent)">
+  <h3>7. Proof of Work and mining (simulator)</h3>
+  <p>Miners change the nonce until the header hash starts with the required number of zeros. Each extra zero makes the search about 16 times harder on average. The toy hash below works the same way as the real one.</p>
+  <div class="panel">
+    <div class="row"><div class="grow">Difficulty (leading zero hex digits): <b id="diffVal">3</b><input type="range" id="diff" min="1" max="5" value="3"></div></div>
+    <p class="mono" id="minePrev"></p>
+    <div class="row"><button id="mineBtn">Mine block</button><button id="mineReset" class="alt">Reset</button></div>
+    <p id="mineOut" class="mono"></p>
+  </div>
+  <div class="stack">
+    <div class="box"><b>Step 3</b> Assemble header with candidate transactions and Merkle root</div>
+    <div class="box"><b>Step 4</b> Change nonce and hash until below target (this is the loop above)</div>
+    <div class="box green"><b>Step 5</b> Broadcast. Others verify and append. Miner earns reward + fees</div>
+  </div>
+  <div class="exam">PoW security comes from the cost of computation. Its drawbacks are high energy use, expensive hardware, slow throughput, and possible concentration of mining power.</div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q7"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://developer.bitcoin.org" target="_blank" rel="noopener">Bitcoin developer documentation: mining and blocks</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s8" style="border-left:5px solid var(--accent)">
+  <h3>8. PBFT and fault tolerance (interactive)</h3>
+  <p>PBFT needs <b>n ≥ 3f + 1</b> nodes to tolerate <b>f</b> faulty ones. With 4 nodes, f = 1. Set the number of faulty nodes and see whether the honest nodes still agree.</p>
+  <div class="panel">
+    <div class="row"><div class="grow">Faulty nodes: <b id="fVal">0</b><input type="range" id="fSlider" min="0" max="2" value="0"></div></div>
+    <div class="nodes" id="pbftNodes"></div>
+    <p id="pbftMsg"></p>
+  </div>
+  <div id="stepPBFT" class="stepper"></div>
+  <div class="exam">Worked check: n = 4 gives f = ⌊(4 − 1)/3⌋ = 1. With 2 faulty nodes out of 4, the rule is broken, so safety is not guaranteed.</div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q8"></div></div>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s9" style="border-left:5px solid var(--accent)">
+  <h3>9. PoS, DPoS, PoA and energy</h3>
+  <p>Energy depends on the consensus mechanism. Bars below show the notes' qualitative comparison (not measured values).</p>
+  <div class="row"><button class="alt" data-cons="pow">Show PoW</button><button class="alt" data-cons="all">Show all</button></div>
+  <div class="bar-chart" id="energyChart"></div>
+  <div class="stack">
+    <div class="box"><b>PoS</b> Validators chosen partly by stake they lock; slashing for misbehaviour</div>
+    <div class="box"><b>DPoS</b> Token holders elect a few block producers</div>
+    <div class="box"><b>PoA</b> Approved, identified validators; highly centralized</div>
+  </div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q9"></div></div>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s10" style="border-left:5px solid var(--accent)">
+  <h3>10. Trilemma, tokenomics and Web3</h3>
+  <p>Click a corner of the triangle to see what a blockchain gains and gives up.</p>
+  <div class="triangle-box">
+    <svg viewBox="0 0 400 300" width="100%" style="max-width:420px">
+      <polygon points="200,30 50,260 350,260" fill="none" stroke="#3dd9c5" stroke-width="2" opacity=".7"/>
+      <g class="tri" data-k="sec" style="cursor:pointer"><circle cx="200" cy="30" r="32" fill="#5fe0a0"/><text x="200" y="35" text-anchor="middle" fill="#fff" font-size="13">Security</text></g>
+      <g class="tri" data-k="scale" style="cursor:pointer"><circle cx="350" cy="260" r="32" fill="#b98cff"/><text x="350" y="265" text-anchor="middle" fill="#fff" font-size="12">Scalability</text></g>
+      <g class="tri" data-k="dec" style="cursor:pointer"><circle cx="50" cy="260" r="32" fill="#ff9e5e"/><text x="50" y="265" text-anchor="middle" fill="#fff" font-size="11">Decentral.</text></g>
+    </svg>
+  </div>
+  <div class="panel" id="triOut"><p class="small">Click Security, Scalability or Decentralization.</p></div>
+  <h4>Tokenomics</h4>
+  <ul><li><b>Supply:</b> total, circulating, maximum; inflationary or supply-reducing</li><li><b>Distribution:</b> mining/staking rewards, team and investor allocations, public sale, ecosystem funds</li><li><b>Utility:</b> gas, governance, staking, service access</li><li><b>Incentives:</b> block rewards, staking yields, fee burning</li><li><b>Vesting:</b> how and when tokens enter circulation</li></ul>
+  <h4>Web1 → Web2 → Web3</h4>
+  <div class="diag">
+    <div class="box"><b>Web 1.0</b>Read<br>Static pages<br>Owner-controlled</div><div class="arrow">→</div>
+    <div class="box"><b>Web 2.0</b>Read + Write<br>Platforms (Google, Facebook)<br>Platform owns data</div><div class="arrow">→</div>
+    <div class="box green"><b>Web3</b>Read + Write + Own<br>dApps, DeFi, DAOs<br>User owns assets via keys</div>
+  </div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q10"></div></div>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<!-- ============ UNIT 2 ============ -->
+<h1 class="unit-h">Unit 2: Bitcoin</h1>
+
+<section class="sec" id="s11" style="border-left:5px solid var(--violet)">
+  <h3>11. Bitcoin basics, supply and halving</h3>
+  <div class="def"><b>Bitcoin (BTC)</b>: first cryptocurrency, proposed in a 2008 whitepaper by Satoshi Nakamoto, live from 3 January 2009 (Genesis Block). Peer-to-peer electronic cash with no bank or government middleman.</div>
+  <div class="panel">
+    <div class="lab">Halving calculator (210,000 blocks per era)</div>
+    <div class="row"><div class="grow">Era (0 = 2009 launch): <b id="eraVal">0</b><input type="range" id="eraSlider" min="0" max="5" value="0"></div></div>
+    <p id="eraOut" class="mono"></p>
+  </div>
+  <div class="exam">Total supply converges to 21,000,000 BTC: 210,000 × 50 × (1 + ½ + ¼ + …) = 210,000 × 50 × 2. Units: 1 BTC = 100,000,000 satoshis; 1 mBTC = 0.001 BTC; 1 µBTC = 0.000001 BTC.</div>
+  <h4>Acquiring BTC</h4>
+  <p>Centralized exchanges (KYC, custodial) · P2P trading (escrow, less identity disclosure) · Bitcoin ATMs · Mining · OTC desks for large trades. Custodial wallets hold your keys for you; non-custodial wallets leave key control with you ("not your keys, not your coins").</p>
+  <p class="small"><b>Read more:</b> <a href="https://bitcoin.org/bitcoin.pdf" target="_blank" rel="noopener">Bitcoin whitepaper</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s12" style="border-left:5px solid var(--violet)">
+  <h3>12. UTXO model and fee calculator (interactive)</h3>
+  <p>Bitcoin does not keep account balances. It tracks UTXOs (unspent outputs). A transaction consumes whole UTXOs and creates new ones: the payment, the change, and the fee (what is left over). Amounts are in satoshis below to avoid rounding errors.</p>
+  <div class="panel">
+    <div class="row">
+      <div class="grow">Input UTXO (BTC): <input type="text" id="utIn" value="1"></div>
+      <div class="grow">Payment to Bob (BTC): <input type="text" id="utPay" value="0.5"></div>
+      <div class="grow">Miner fee (BTC): <input type="text" id="utFee" value="0.0001"></div>
+    </div>
+    <div class="diag" id="utxoDiag"></div>
+    <p id="utxoMsg"></p>
+  </div>
+  <div class="exam">Fee = total inputs − total outputs. Example from the notes: 1 − 0.7 − 0.29 = 0.01 BTC. Check: inputs must equal outputs plus fee.</div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q12"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://developer.bitcoin.org" target="_blank" rel="noopener">Bitcoin developer documentation: transactions</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s13" style="border-left:5px solid var(--violet)">
+  <h3>13. Bitcoin transaction lifecycle</h3>
+  <div id="stepTx" class="stepper"></div>
+  <p class="small"><b>Read more:</b> <a href="https://www.oreilly.com/library/view/mastering-bitcoin-3rd/9781098150082/ch06.html" target="_blank" rel="noopener">Mastering Bitcoin, 3rd ed., Chapter 6: Transactions (Antonopoulos and Harding)</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s14" style="border-left:5px solid var(--violet)">
+  <h3>14. Bitcoin Script: P2PKH stack trace</h3>
+  <p>Bitcoin Script is stack-based and not Turing-complete (no loops). The ScriptSig runs first, then the ScriptPubKey, on one stack. Step through the trace and watch the stack change.</p>
+  <div id="stepScript" class="stepper"></div>
+  <div class="exam">If OP_EQUALVERIFY or OP_CHECKSIG fails, the input is rejected immediately. The input is valid only if one TRUE value is left on the stack.</div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q14"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://developer.bitcoin.org/devguide/transactions.html" target="_blank" rel="noopener">Bitcoin developer documentation: Script</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<!-- ============ UNIT 3 ============ -->
+<h1 class="unit-h">Unit 3: Ethereum, Solidity, DApps and Advanced Topics</h1>
+
+<section class="sec" id="s15" style="border-left:5px solid var(--sky)">
+  <h3>15. Ether, gas and accounts (calculator)</h3>
+  <div class="panel">
+    <div class="row">
+      <div class="grow">Gas used: <input type="text" id="gasUsed" value="1200000"></div>
+      <div class="grow">Gas price (gwei): <input type="text" id="gasPrice" value="40"></div>
+      <div class="grow">ETH price (USD): <input type="text" id="ethUsd" value="3000"></div>
+    </div>
+    <p id="gasOut" class="mono"></p>
+  </div>
+  <div class="exam">Fee = gas used × gas price. Convert gwei to ETH by dividing by 10⁹. Unused gas below the limit is not charged. A transaction that runs out of gas still pays for what it used.</div>
+  <div class="diag">
+    <div class="box"><b>EOA</b>Externally owned account<br>Controlled by private key<br>Holds no code<br>Can start transactions</div>
+    <div class="box amber"><b>Contract account</b>Created on deployment<br>Controlled by its code<br>Holds code and state<br>Acts only when called</div>
+  </div>
+  <p class="small"><b>Read more:</b> <a href="https://ethereum.org/developers/docs/gas/" target="_blank" rel="noopener">Ethereum developer docs: gas and fees</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s16" style="border-left:5px solid var(--sky)">
+  <h3>16. DApps and the Ethereum ecosystem</h3>
+  <div class="diag">
+    <div class="box"><b>Traditional app</b>Company server<br>Central database<br>Username and password</div>
+    <div class="box green"><b>DApp</b>Smart contract on chain<br>Replicated state<br>Wallet signs (MetaMask)</div>
+  </div>
+  <ul><li><b>DeFi:</b> DEXs (Uniswap), lending (Aave, Compound), stablecoins, yield</li><li><b>NFTs:</b> ERC-721 (unique), ERC-1155 (fungible and non-fungible). Holding an NFT does not automatically transfer copyright</li><li><b>DAOs:</b> governance by token voting, recorded on-chain; treasury released through multisig or contract approval</li></ul>
+  <div class="panel"><div class="lab">Quick check</div><div id="q16"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://ethereum.org/developers/docs/dapps/" target="_blank" rel="noopener">Ethereum developer docs: DApps</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s17" style="border-left:5px solid var(--sky)">
+  <h3>17. Solidity essentials (flip cards and matching)</h3>
+  <div class="flipwrap" id="flashSol"></div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q17"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://docs.soliditylang.org" target="_blank" rel="noopener">Solidity official documentation</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s18" style="border-left:5px solid var(--sky)">
+  <h3>18. DApp architecture (click a layer)</h3>
+  <p>Click any layer to see what it does and which components it talks to.</p>
+  <div class="stack" id="dappLayers"></div>
+  <div class="panel" id="dappInfo"><p class="small">Select a layer above.</p></div>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s19" style="border-left:5px solid var(--sky)">
+  <h3>19. Contract deployment and ERC-20 approve/transferFrom</h3>
+  <h4>Deployment: Write → Compile → Deploy → Interact</h4>
+  <div id="stepDeploy" class="stepper"></div>
+  <h4>Approve and transferFrom (Alice lets a DEX take 50 tokens)</h4>
+  <div id="stepERC" class="stepper"></div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q19"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://remix.ethereum.org" target="_blank" rel="noopener">Remix IDE (try the exercises in your browser)</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s20" style="border-left:5px solid var(--sky)">
+  <h3>20. Layer 2 scaling</h3>
+  <div class="def"><b>Layer 2</b> processes transactions on top of Layer 1 (Ethereum), using L1 for settlement and security. Ethereum L1 handles about 15–30 TPS.</div>
+  <h4>State channel: 100 payments on 2 on-chain transactions</h4>
+  <div class="panel">
+    <div class="row"><button id="chStep">Send one off-chain payment</button><button id="chReset" class="alt">Reset</button></div>
+    <div class="diag" style="gap:20px"><div class="box"><b>On-chain txs</b><span id="chOn">0</span></div><div class="box green"><b>Off-chain payments</b><span id="chOff">0</span></div></div>
+    <p class="small" id="chMsg"></p>
+  </div>
+  <h4>Rollups</h4>
+  <div class="diag">
+    <div class="box">Many users</div><div class="arrow">→</div>
+    <div class="box green"><b>Rollup</b>Execute many tx off-chain<br>Post batch + state root</div><div class="arrow">→</div>
+    <div class="box"><b>Ethereum L1</b>Stores batch data<br>Security</div>
+  </div>
+  <table><tr><th></th><th>Optimistic</th><th>ZK</th></tr><tr><td>Check</td><td>Fraud proof in 7-day window</td><td>Validity proof, checked at once</td></tr><tr><td>Withdrawal</td><td>~7 days</td><td>Faster</td></tr><tr><td>Examples</td><td>Arbitrum, Optimism, Base</td><td>zkSync, Starknet, Scroll</td></tr></table>
+  <h4>Sidechain</h4><p>Separate chain with its own validators, linked by a bridge. Lock 10 ETH → 10 tokens created on the sidechain. Examples: Polygon PoS, Gnosis. Security depends on the sidechain's validators.</p>
+  <div class="panel"><div class="lab">Quick check</div><div id="q20"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://ethereum.org/layer-2/" target="_blank" rel="noopener">Ethereum developer docs: Layer 2</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s21" style="border-left:5px solid var(--sky)">
+  <h3>21. Interoperability, Polkadot, Cosmos and bridges</h3>
+  <div class="diag">
+    <div class="box"><b>Polkadot</b>Relay Chain (shared security)<br>Parachains (specialised)<br>XCM messaging</div>
+    <div class="box"><b>Cosmos</b>Hubs and zones<br>Each chain secures itself<br>IBC protocol</div>
+  </div>
+  <h4>Lock and mint bridge</h4>
+  <div id="stepBridge" class="stepper"></div>
+  <div class="warn">Bridges hold large locked balances. Ronin lost about <span class="usd" data-usd="600000000">USD 600 million</span> (5 of 9 validator keys stolen, 2022). Wormhole lost about <span class="usd" data-usd="320000000">USD 320 million</span> (signature-verification bug). A bridge is only as secure as its weakest verification step.</div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q21"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://wiki.polkadot.network" target="_blank" rel="noopener">Polkadot wiki</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s22" style="border-left:5px solid var(--sky)">
+  <h3>22. Zero-knowledge proofs (cave simulator)</h3>
+  <p>Ali Baba's cave. Peggy wants to prove she knows the magic word without saying it. Victor picks a path to see her come out of. A cheater guesses right with 50% chance per round.</p>
+  <div class="panel">
+    <div class="row"><div class="grow">Rounds: <b id="rVal">20</b><input type="range" id="rRange" min="1" max="30" value="20"></div></div>
+    <div class="row"><button id="caveKnow">Run as honest prover (knows word)</button><button id="caveCheat" class="alt">Run as cheater (no word)</button></div>
+    <p class="mono" id="caveOut"></p>
+    <p class="small" id="caveProb"></p>
+  </div>
+  <table><tr><th>Property</th><th>zk-SNARK</th><th>zk-STARK</th></tr><tr><td>Proof size</td><td>Small (~200 bytes)</td><td>Larger (~50–200 KB)</td></tr><tr><td>Setup</td><td>Some need trusted setup</td><td>Transparent</td></tr><tr><td>Basis</td><td>Elliptic curve</td><td>Hash-based (quantum-resistant)</td></tr><tr><td>Examples</td><td>Zcash, zkSync</td><td>Starknet</td></tr></table>
+  <div class="exam">Three properties: completeness (true statements are accepted), soundness (false ones are not), zero-knowledge (nothing beyond truth is learned). Blockchains need non-interactive proofs, which SNARKs and STARKs are.</div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q22"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://ethereum.org/developers/docs/advanced/zero-knowledge-proofs/" target="_blank" rel="noopener">Ethereum.org: zero-knowledge proofs</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s23" style="border-left:5px solid var(--sky)">
+  <h3>23. DID and SSI (click a participant)</h3>
+  <div class="diag" style="position:relative">
+    <div class="box" data-who="issuer" style="cursor:pointer"><b>Issuer</b>University</div>
+    <div class="box" data-who="holder" style="cursor:pointer"><b>Holder</b>Student wallet</div>
+    <div class="box" data-who="verifier" style="cursor:pointer"><b>Verifier</b>Employer</div>
+  </div>
+  <div class="box grey" style="margin:8px auto;max-width:420px;text-align:center"><b>Registry (blockchain)</b>DIDs · public keys · schemas · revocation</div>
+  <div class="panel" id="didInfo"><p class="small">Click a participant to see its role.</p></div>
+  <div class="warn">A DID only proves control of a key. It carries no attributes. SSI is the goal, and DIDs are the identifier layer that makes it possible. Verifiers do not call the issuer live for each check, but they do read the issuer's DID and revocation data.</div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q23"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://www.w3.org/TR/did-core/" target="_blank" rel="noopener">W3C Decentralized Identifiers (DID) specification</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<!-- ============ UNIT 4 ============ -->
+<h1 class="unit-h">Unit 4: Hyperledger</h1>
+
+<section class="sec" id="s24" style="border-left:5px solid var(--green)">
+  <h3>24. Hyperledger Fabric: the nine-step transaction</h3>
+  <p>Endorsement is not commitment. Click through the stages of a university certificate transaction.</p>
+  <div id="stepFabric" class="stepper"></div>
+  <div class="exam">Known identities plus endorsement policy replace mining. Ordering and validation are separate stages. An invalid transaction is still written to the block, but it does not update the world state.</div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q24"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://hyperledger-fabric.readthedocs.io" target="_blank" rel="noopener">Hyperledger Fabric documentation</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s25" style="border-left:5px solid var(--green)">
+  <h3>25. Chaincode and its lifecycle</h3>
+  <p>Chaincode is Fabric's smart contract. It runs on peers, never on ordering nodes, and is written in Go, Node.js or Java. Steps 1–4 happen once, with every organisation agreeing. Steps 5–6 happen on every use.</p>
+  <div id="stepCC" class="stepper"></div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q25"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://hyperledger-fabric.readthedocs.io/en/latest/chaincode_lifecycle.html" target="_blank" rel="noopener">Fabric chaincode lifecycle documentation</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s26" style="border-left:5px solid var(--green)">
+  <h3>26. BaaS and Caliper benchmarking</h3>
+  <div class="row"><button class="alt" id="toggleStack" data-mode="self">Self-managed</button><button class="alt" data-mode="baas" id="toggleBaas">BaaS</button></div>
+  <div class="stack" id="stackBox"></div>
+  <h4>Caliper pipeline</h4>
+  <div class="diag">
+    <div class="box"><b>1. Configuration</b>Workload, rate, duration</div><div class="arrow">→</div>
+    <div class="box"><b>2. Workload generator</b>Reads and writes</div><div class="arrow">→</div>
+    <div class="box"><b>3. Blockchain under test</b>Fabric network</div><div class="arrow">→</div>
+    <div class="box green"><b>4. Report</b>Throughput, latency, success</div>
+  </div>
+  <table><tr><th>Metric</th><th>Meaning</th></tr><tr><td>Throughput</td><td>Operations per second</td></tr><tr><td>Latency</td><td>Time per operation</td></tr><tr><td>Success rate</td><td>% of operations that succeed (falls when saturated)</td></tr><tr><td>CPU, memory, network I/O</td><td>Find the bottleneck</td></tr></table>
+  <div class="warn">Amazon Managed Blockchain stops accepting new customers on 29 October 2026 (per the notes). Azure Blockchain Service was retired in 2021. Confirm current availability before relying on either.</div>
+  <p class="small"><b>Read more:</b> <a href="https://hyperledger-caliper.github.io/caliper/" target="_blank" rel="noopener">Hyperledger Caliper documentation</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<!-- ============ UNIT 5 ============ -->
+<h1 class="unit-h">Unit 5: Convergence, Sustainability and Applications</h1>
+
+<section class="sec" id="s27" style="border-left:5px solid var(--amber)">
+  <h3>27. Blockchain + AI + IoT (four layers) and federated learning</h3>
+  <div class="stack">
+    <div class="box green"><b>Layer 4: Application and AI</b>Analysis · prediction · anomaly detection · decisions · alerts</div>
+    <div class="box"><b>Layer 3: Blockchain</b>Device registration · sensor-data hashes · access permissions · smart-contract records</div>
+    <div class="box amber"><b>Layer 2: Edge and gateway</b>Collection · filtering · authentication · local caching</div>
+    <div class="box red"><b>Layer 1: IoT devices</b>Temperature · humidity · GPS · smart meters · health monitors</div>
+  </div>
+  <p class="small">On-chain: hashes, event records, device registration, access permissions. Off-chain: raw readings, images, video.</p>
+  <h4>Federated learning with blockchain (hospitals)</h4>
+  <div id="stepFed" class="stepper"></div>
+  <div class="exam">Federated learning keeps raw data local, but model updates can still leak information, and blockchain alone does not stop model poisoning.</div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q27"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://en.wikipedia.org/wiki/Federated_learning" target="_blank" rel="noopener">Federated learning overview</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s28" style="border-left:5px solid var(--amber)">
+  <h3>28. Green and sustainable blockchain</h3>
+  <p>Energy use mainly comes from consensus (mining), running nodes, storage and communication, transaction execution, and cooling. Measure total annual electricity, carbon emissions, carbon intensity of the power source, hardware lifecycle and e-waste, and throughput, not just energy per transaction.</p>
+  <div class="diag">
+    <div class="box"><b>Efficient consensus</b>PoS or permissioned instead of PoW</div>
+    <div class="box"><b>Layer 2</b>Off-chain processing</div>
+    <div class="box"><b>Renewables</b>Solar, wind, hydro</div>
+    <div class="box"><b>Lean data</b>Store only what is needed on-chain</div>
+  </div>
+  <div class="exam">Blockchain can record a carbon credit's history, but it cannot verify that the underlying physical claim is true.</div>
+  <div class="panel"><div class="lab">Quick check</div><div id="q28"></div></div>
+  <p class="small"><b>Read more:</b> <a href="https://ethereum.org/energy-consumption/" target="_blank" rel="noopener">Ethereum.org: energy consumption of Ethereum</a></p>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s29" style="border-left:5px solid var(--amber)">
+  <h3>29. Case studies: supply chain, healthcare, FinTech, identity</h3>
+  <h4>Food supply chain (milk)</h4>
+  <div id="stepSupply" class="stepper"></div>
+  <h4>Healthcare: on-chain hash, off-chain record</h4>
+  <div id="stepHealth" class="stepper"></div>
+  <h4>FinTech: traditional vs blockchain cross-border payment</h4>
+  <div class="diag">
+    <div class="box red"><b>Traditional</b>Sender bank → correspondent bank → receiving bank → settlement → receiver<br><span class="small">Many intermediaries, fees and delay</span></div>
+    <div class="box green"><b>Blockchain</b>Initiate → submit → validate → record in block → receiver gets asset<br><span class="small">Protocol enforces settlement rules</span></div>
+  </div>
+  <p class="small">UPI is a conventional interoperable payment system and does not need a blockchain. A CBDC such as the Digital Rupee does not necessarily use a public blockchain.</p>
+  <div class="panel"><div class="lab">Quick check</div><div id="q29"></div></div>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<section class="sec" id="s30" style="border-left:5px solid var(--amber)">
+  <h3>30. Emerging trends, careers and research (flash cards)</h3>
+  <div class="flipwrap" id="flashTrends"></div>
+  <label class="small"><input type="checkbox" class="done"> Mark finished</label>
+</section>
+
+<!-- ============ PRACTICE ============ -->
+<h1 class="unit-h">Practice</h1>
+
+<section class="sec" id="s31" style="border-left:5px solid var(--pink)">
+  <h3>31. Mixed exam bank</h3>
+  <p>Ten random questions from every topic. Click "New set" for another draw.</p>
+  <div class="row"><button id="mixNew">New set of 10</button><span class="small" id="mixScore"></span></div>
+  <div id="mixBox"></div>
+</section>
+
+
+
+<footer>Built from the uploaded PDFs. Toy hash used in demos is for teaching only; real systems use SHA-256 or Keccak-256.</footer>
+</main>
+</div>
+
+<script>
+// ---------- helpers ----------
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+function toyHash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}h^=h>>>13;h=Math.imul(h,0x5bd1e995);h^=h>>>15;return (h>>>0).toString(16).padStart(8,'0');}
+function hexDiff(a,b){let d=0;for(let i=0;i<Math.min(a.length,b.length);i++) if(a[i]!==b[i]) d++;return d;}
+
+// ---------- quizzes ----------
+function quiz(el, qs){
+  el.innerHTML='';
+  let score=0, answered=0;
+  const bar=document.createElement('div');bar.className='small';bar.textContent='';
+  qs.forEach((q,qi)=>{
+    const box=document.createElement('div');box.className='qz';
+    box.innerHTML='<b>'+(qi+1)+'. '+q.q+'</b><div class="opts"></div><div class="fb"></div>';
+    const opts=$('.opts',box), fb=$('.fb',box);
+    let done=false;
+    q.o.forEach((t,i)=>{
+      const b=document.createElement('button');b.textContent=t;
+      b.onclick=()=>{ if(done) return; done=true; answered++;
+        if(i===q.a){b.classList.add('right');fb.textContent='Correct. '+(q.w||'');score++;}
+        else{b.classList.add('wrongc');opts.children[q.a].classList.add('right');fb.textContent='Not quite. '+(q.w||'');}
+        bar.textContent='Score: '+score+' / '+answered+' answered';
+      };
+      opts.appendChild(b);
+    });
+    box.appendChild(fb);el.appendChild(box);
+  });
+  el.appendChild(bar);
+}
+
+// ---------- stepper ----------
+function stepper(el, steps){
+  let i=0;
+  el.classList.add('stepper');
+  el.innerHTML='<div class="dots"></div><div class="stp"></div><div class="stxt"></div><div class="stack-view"></div><div style="margin-top:6px"><button class="alt prev">◀ Back</button><button class="next">Next ▶</button><button class="alt restart">Restart</button></div>';
+  const dots=$('.dots',el), stp=$('.stp',el), stxt=$('.stxt',el), sv=$('.stack-view',el);
+  steps.forEach((s,k)=>{const d=document.createElement('div');d.className='dot';d.textContent=k+1;d.onclick=()=>{i=k;draw();};dots.appendChild(d);});
+  function draw(){
+    $$('.dot',dots).forEach((d,k)=>{d.className='dot'+(k===i?' cur':(k<i?' past':''));});
+    stp.textContent='Step '+(i+1)+' of '+steps.length+': '+steps[i].t;
+    stxt.innerHTML=steps[i].d;
+    if(steps[i].v) sv.innerHTML=steps[i].v; else sv.innerHTML='';
+    $('.prev',el).disabled=i===0; $('.next',el).disabled=i===steps.length-1;
+  }
+  $('.prev',el).onclick=()=>{if(i>0){i--;draw();}};
+  $('.next',el).onclick=()=>{if(i<steps.length-1){i++;draw();}};
+  $('.restart',el).onclick=()=>{i=0;draw();};
+  draw();
+}
+
+// ---------- flashcards ----------
+function flash(el, cards){
+  el.innerHTML='';
+  cards.forEach(c=>{
+    const f=document.createElement('div');f.className='flip';
+    f.innerHTML='<div class="inner"><div class="f">'+c[0]+'</div><div class="b">'+c[1]+'</div></div>';
+    f.onclick=()=>f.classList.toggle('on');
+    el.appendChild(f);
+  });
+}
+
+// ---------- quiz banks (used per section and in mixed bank) ----------
+const BANK = {
+  q1:[{q:'Which system has one authority controlling all data?',o:['Distributed','Centralized','Decentralized'],a:1,w:'One authority means centralized.'},{q:'Is Google Search distributed?',o:['Yes','No'],a:0,w:'It runs across many networked machines, but one company controls it.'}],
+  q2:[{q:'A private bank network where only the bank\'s own branches validate. Type?',o:['Public','Private','Hybrid'],a:1,w:'One organisation governs and selects participants.'},{q:'Five banks share a ledger and each runs a node. Type?',o:['Consortium','Public','Private'],a:0,w:'Several known organisations govern together.'},{q:'Which type is permissionless?',o:['Public','Private','Consortium'],a:0,w:'Anyone who follows the protocol can join.'}],
+  q4:[{q:'What is the avalanche effect?',o:['Small input change gives a very different hash','Hashes get longer over time','Hash output depends on input length'],a:0,w:'That is the defining property.'},{q:'SHA-256 output length?',o:['128 bits','256 bits','512 bits'],a:1,w:'256 bits, or 32 bytes.'}],
+  q6:[{q:'Which key is used to sign?',o:['Public key','Private key'],a:1,w:'The private key signs; the public key verifies.'},{q:'Which property does a signature NOT by itself guarantee?',o:['Authentication','Integrity','Confidentiality of the data'],a:2,w:'A signature does not hide the data. Use encryption for confidentiality.'}],
+  q7:[{q:'What does the miner change to find a valid hash?',o:['Previous hash','Nonce','Merkle root'],a:1,w:'The nonce is varied until the hash meets the target.'},{q:'Each extra leading zero in PoW difficulty makes the search roughly how much harder on average (hex)?',o:['2 times','16 times','100 times'],a:1,w:'Each hex digit has 16 possible values.'}],
+  q8:[{q:'PBFT needs n nodes to tolerate f faulty nodes. Which rule?',o:['n ≥ f + 1','n ≥ 2f','n ≥ 3f + 1'],a:2,w:'n ≥ 3f + 1.'},{q:'Minimum nodes to tolerate 1 faulty node?',o:['3','4','5'],a:1,w:'3(1) + 1 = 4.'}],
+  q9:[{q:'Which mechanism has very high energy use?',o:['PoS','PoA','PoW'],a:2,w:'Mining competition is energy-intensive.'},{q:'In DPoS, who selects block producers?',o:['Miners','Token holders by voting','A central company'],a:1,w:'Token holders elect delegates.'}],
+  q10:[{q:'Which corner of the trilemma does Bitcoin prioritise over scalability?',o:['Security and decentralization','Scalability and speed','Privacy only'],a:0,w:'Bitcoin favours security and decentralization.'},{q:'Web3 is best described as',o:['Read-only pages','Read, write and own','Only social platforms'],a:1,w:'Users own assets and data through keys.'}],
+  q12:[{q:'Bitcoin tracks value as',o:['Account balances','UTXOs','Gas units'],a:1,w:'Unspent transaction outputs.'},{q:'Input 1 BTC, payment 0.7, change 0.29. Fee?',o:['0.01 BTC','0.3 BTC','0 BTC'],a:0,w:'1 − 0.7 − 0.29 = 0.01.'}],
+  q14:[{q:'Which runs first in P2PKH validation?',o:['ScriptPubKey','ScriptSig'],a:1,w:'ScriptSig first, then ScriptPubKey on the same stack.'},{q:'Bitcoin Script is',o:['Turing-complete with loops','Stack-based, no loops'],a:1,w:'It is intentionally non-Turing-complete.'}],
+  q16:[{q:'Which account can initiate a transaction?',o:['Contract account','EOA'],a:1,w:'Only EOAs start transactions.'},{q:'Who controls a DApp backend?',o:['A company server','Smart contracts on the blockchain'],a:1,w:'DApp logic runs as smart contracts.'}],
+  q17:[{q:'Which keyword stops an external call from running inside the contract?',o:['external','internal','virtual'],a:0,w:'external is callable only from outside (without this.).'},{q:'Which function type can change state?',o:['view','pure','regular'],a:2,w:'Regular functions can read and write state.'}],
+  q19:[{q:'Which compiled output is stored on-chain?',o:['ABI','Bytecode'],a:1,w:'Bytecode runs on the EVM; the ABI is used by the frontend.'},{q:'Which ERC standard is for fungible tokens?',o:['ERC-20','ERC-721','ERC-1155'],a:0,w:'ERC-20 is fungible.'}],
+  q20:[{q:'In a state channel, 100 off-chain payments need how many on-chain transactions (open and close)?',o:['100','2','0'],a:1,w:'Open and close.'},{q:'Which rollup verifies a validity proof for each batch?',o:['Optimistic','ZK'],a:1,w:'ZK rollups use validity proofs.'}],
+  q21:[{q:'Polkadot secures parachains through',o:['A Relay Chain','Each parachain alone','Miners'],a:0,w:'The Relay Chain provides shared security.'},{q:'Cosmos inter-chain protocol is',o:['XCM','IBC'],a:1,w:'IBC is Cosmos. XCM is Polkadot.'}],
+  q22:[{q:'Which property means the verifier learns nothing beyond truth?',o:['Completeness','Soundness','Zero-knowledge'],a:2,w:'That is the zero-knowledge property.'},{q:'Cheating probability per round in the cave is',o:['1/2','1/16','1/20'],a:0,w:'Victor\'s pick gives a 50% guess chance per round.'}],
+  q23:[{q:'A DID carries',o:['Attributes such as degree or age','No attributes; it only proves key control'],a:1,w:'It answers "who", not "what about them".'},{q:'Who issues the credential?',o:['Holder','Issuer','Verifier'],a:1,w:'The issuer (e.g. university) signs it.'}],
+  q24:[{q:'Which operation creates no block?',o:['submitTransaction','evaluateTransaction'],a:1,w:'Queries use evaluateTransaction.'},{q:'Which Fabric stage checks read data has not changed?',o:['Endorsement','Ordering','Validation'],a:2,w:'Validation checks endorsements and that read data is unchanged.'}],
+  q25:[{q:'Where does Fabric chaincode run?',o:['Ordering nodes','Peers'],a:1,w:'Chaincode runs on peers.'},{q:'Which steps happen once per deployment?',o:['Invoke and validate','Package, install, approve, commit'],a:1,w:'Steps 1–4 are deployment; 5–6 happen each use.'}],
+  q27:[{q:'Which layer collects raw sensor readings?',o:['Layer 1 (IoT devices)','Layer 4 (AI)'],a:0,w:'IoT devices.'},{q:'Federated learning keeps what local?',o:['Model updates','Raw patient data'],a:1,w:'Raw data stays with each hospital.'}],
+  q28:[{q:'Which consensus has the highest energy use?',o:['PoS','PoW','PoA'],a:1,w:'Proof of Work.'},{q:'Can blockchain prove a physical claim is true?',o:['Yes','No; it only records what was reported'],a:1,w:'It records and protects records, but cannot verify the physical world.'}],
+  q29:[{q:'In the supply chain example, what is shared on the ledger?',o:['Only the final product','Every transfer, with product ID and dates'],a:1,w:'Every transfer is written.'},{q:'What goes on-chain in healthcare?',o:['Full medical records','Record hashes and consent records'],a:1,w:'Full records stay in secure databases.'}]
+};
+
+// Mixed bank: flatten
+function allQs(){return Object.values(BANK).flat();}
+
+// ---------- flashcards data ----------
+const FLASH = {
+  sol:[['view','Reads state, does not modify it'],['pure','Neither reads nor modifies state'],['payable','Can receive Ether with the call (msg.value)'],['virtual / override','Overridable function, and its child override'],['require','Validates input; reverts if false'],['emit','Writes an event log cheaply'],['storage vs memory','Persistent on-chain vs temporary per call'],['calldata','Read-only input for external functions; cheaper']],
+  hash:[['Deterministic','Same input always gives same output'],['Pre-image resistance','Hard to recover input from hash'],['Collision resistance','Hard to find two inputs with the same hash'],['Avalanche effect','Tiny change gives a totally different hash'],['SHA-1','160 bits; insecure'],['SHA-256 / Keccak-256','256-bit; used by Bitcoin / Ethereum']],
+  trends:[['Layer 2','Off-chain execution, on-chain settlement'],['ZKP','Prove a statement without revealing data'],['DeFi','Exchanges, lending, stablecoins with contracts'],['Tokenisation','Digital tokens for real-world assets'],['CBDC','Digital central-bank money (e.g. Digital Rupee)'],['Interoperability','Cross-chain messaging and asset transfer'],['AI + blockchain','Fraud detection, model provenance'],['Green blockchain','Efficient consensus, renewable nodes']]
+};
+
+// ---------- SECTION INITS ----------
+// s1
+quiz($('#q1'), [{q:'A bank runs one central server holding all accounts. Classify.',o:['Centralized','Decentralized','Distributed only'],a:0,w:'One authority and a single point of failure.'},{q:'Bitcoin is best described as',o:['Centralized','Distributed and decentralized','Centralized and distributed'],a:1,w:'Both distributed and decentralized.'}]);
+// s2
+quiz($('#q2'), BANK.q2);
+// s3 chain
+(function(){
+  const init=[ 'Genesis: start of chain', 'Alice pays Bob 1 BTC', 'Bob pays Carol 0.5 BTC', 'Carol pays Dan 0.2 BTC' ];
+  let data=init.slice(), links=[];
+  function computeAll(){
+    let prev='0000000000000000';
+    const hashes=[];
+    for(let i=0;i<data.length;i++){
+      const h=toyHash(links[i]+'|'+data[i]);
+      hashes.push(h); prev=h;
+    }
+    return hashes;
+  }
+  function reset(){data=init.slice();links=[];let p='00000000';for(let i=0;i<data.length;i++){links.push(p);p=toyHash(p+'|'+data[i]);}}
+  function render(){
+    const box=$('#chainBox');box.innerHTML='';
+    const hashes=computeAll();
+    let broken=0;
+    data.forEach((d,i)=>{
+      const valid = i===0 ? links[0]==='00000000' : links[i]===hashes[i-1];
+      if(!valid) broken++;
+      const div=document.createElement('div');div.className='blk'+(valid?'':' broken');
+      div.innerHTML='<b>Block '+i+'</b><div class="lbl">Data</div><input type="text" value="'+d.replace(/"/g,'&quot;')+'" data-i="'+i+'"><div class="lbl">Previous hash (stored)</div><div class="mono">'+links[i]+'</div><div class="lbl">This block\'s hash</div><div class="mono">'+hashes[i]+'</div><div class="lbl">Link status</div><div>'+(valid?'✓ linked':'✗ link broken')+'</div>';
+      box.appendChild(div);
+    });
+    $$('input[data-i]',box).forEach(inp=>{inp.oninput=()=>{data[+inp.dataset.i]=inp.value;render();};});
+    $('#chainMsg').textContent = broken===0 ? 'Chain valid: every stored previous hash matches.' : broken+' link(s) broken. Editing a block changed its hash, so the next block no longer points to it.';
+  }
+  $('#fixChain').onclick=()=>{ const h=computeAll(); links=links.map((_,i)=> i===0?links[0]:h[i-1]); render(); $('#chainMsg').textContent='Attacker rewrote every stored link. The chain looks valid again, but every block had to be recomputed. In a real network that costs work and must outrun honest nodes.'; };
+  $('#resetChain').onclick=()=>{reset();render();};
+  reset();render();
+})();
+// s4 hash
+(function(){
+  const inp=$('#hashIn'); let prev='';
+  function up(){const v=inp.value;const h=toyHash(v);const d=prev?hexDiff(prev,h):0;$('#hashOut').textContent='toy hash: '+h;$('#hashDiff').textContent=prev?('Hex digits changed from the previous input: '+d+' of 8.'):'Type to see the hash change.';prev=h;}
+  inp.oninput=up;up();
+  flash($('#flashHash'),FLASH.hash);
+  quiz($('#q4'),BANK.q4);
+})();
+// s5 merkle
+(function(){
+  function render(){
+    const txs=$$('.tx').map(i=>i.value);
+    const L=txs.map(t=>toyHash(t));
+    const L1=[toyHash(L[0]+L[1]),toyHash(L[2]+L[3])];
+    const R=toyHash(L1[0]+L1[1]);
+    $('#merkleBox').innerHTML=
+      '<div class="lab">Merkle root</div><div class="mnode root mono">'+R+'</div>'+
+      '<div class="mlev"><div class="mnode mono">'+L1[0]+'<br><span class="small">H(H1‖H2)</span></div><div class="mnode mono">'+L1[1]+'<br><span class="small">H(H3‖H4)</span></div></div>'+
+      '<div class="mlev">'+L.map((h,i)=>'<div class="mnode mono">'+h+'<br><span class="small">H'+(i+1)+' = hash(T'+(i+1)+')</span></div>').join('')+'</div>'+
+      '<div class="small">Change any transaction text above. Its leaf, the pair hash and the root all change.</div>';
+  }
+  $$('.tx').forEach(i=>i.oninput=render);render();
+})();
+// s6 signature stepper
+stepper($('#stepSig'),[
+ {t:'Start with the data',d:'Take the original message, document or software to be signed.'},
+ {t:'Hash the data',d:'Run it through a hash function to get a fixed-size digest.'},
+ {t:'Sign with the private key',d:'The signature algorithm uses the signer\'s private key to produce the signature. Note: the notes say a signature is not simply an encrypted hash.'},
+ {t:'Publish or send',d:'Send the data and signature, plus what the verifier needs to get the public key.'},
+ {t:'Verify (receiver)',d:'Hash the received data again. Use the public key to check that the signature matches this data.'},
+ {t:'Result',d:'Valid means the private key holder authorised this data and it has not changed since signing.'}
+]);
+quiz($('#q6'),BANK.q6);
+// s7 PoW
+(function(){
+  let lastBlock='Block 7: Alice to Bob 1 BTC, Bob to Carol 0.5 BTC';
+  function render(){$('#diffVal').textContent=$('#diff').value;$('#minePrev').textContent='Block data: '+lastBlock+'\nTarget: hash starts with '+'0'.repeat(+$('#diff').value)+'...';}
+  $('#diff').oninput=render;
+  $('#mineBtn').onclick=()=>{
+    const k=+$('#diff').value, target='0'.repeat(k); let n=0, h='';
+    const t0=performance.now();
+    while(n<3000000){ h=toyHash(lastBlock+'|nonce='+n); if(h.startsWith(target)) break; n++; }
+    if(h.startsWith(target)) $('#mineOut').textContent='Found nonce = '+n+' after '+(n+1)+' attempts.\nHash = '+h+'\nValid for target '+target+'...';
+    else $('#mineOut').textContent='No solution in 3,000,000 tries. Lower difficulty.';
+  };
+  $('#mineReset').onclick=()=>{$('#mineOut').textContent='';};
+  render();
+  quiz($('#q7'),BANK.q7);
+})();
+// s8 PBFT
+(function(){
+  const names=['A (primary)','B','C','D'];
+  function render(){
+    const f=+$('#fSlider').value; $('#fVal').textContent=f;
+    const n=4; const F=Math.floor((n-1)/3);
+    $('#pbftNodes').innerHTML=names.map((nm,i)=>{
+      const bad = i>=n-f; // last f nodes faulty
+      return '<div><div class="node'+(bad?' faulty':'')+(i===0?' primary':'')+'">'+nm.split(' ')[0]+'</div><div class="small" style="text-align:center">'+(bad?'faulty':'honest')+'</div></div>';
+    }).join('');
+    let msg;
+    if(f<=F) msg='f = '+f+' is within the limit ⌊(n−1)/3⌋ = '+F+'. Honest nodes still get 2f+1 = '+(2*f+1)+' or more matching messages, so they agree on the correct block.';
+    else msg='f = '+f+' exceeds the limit '+F+'. The guarantee no longer holds: faulty nodes can block or split agreement.';
+    $('#pbftMsg').innerHTML='<b>'+msg+'</b>';
+  }
+  $('#fSlider').oninput=render; render();
+  stepper($('#stepPBFT'),[
+   {t:'Client request',d:'The client sends a transaction to the primary (leader) node.'},
+   {t:'Pre-prepare',d:'The primary orders the request and broadcasts a pre-prepare message to all replicas.'},
+   {t:'Prepare',d:'Each replica verifies the transaction and broadcasts a prepare message.'},
+   {t:'Commit',d:'Nodes collect enough matching prepares, then broadcast commit messages.'},
+   {t:'Committed',d:'With enough commits, the transaction is final in the ledger.'},
+   {t:'Reply',d:'Nodes send confirmation to the client.'}
+  ]);
+  quiz($('#q8'),BANK.q8);
+})();
+// s9 energy
+(function(){
+  const data=[['PoW','HIGH',true],['PoS','LOW'],['DPoS','LOW'],['PoA','LOW'],['Permissioned BFT/Raft','LOW']];
+  function draw(mode){
+    const list= mode==='pow'? data.slice(0,1): data;
+    $('#energyChart').innerHTML=list.map(d=>{const h=d[1]==='HIGH'?180:40;return '<div class="bar-wrap"><div class="bar'+(d[1]==='HIGH'?' hi':'')+'" style="height:'+h+'px">'+d[1]+'</div>'+d[0]+'</div>';}).join('');
+  }
+  $$('[data-cons]').forEach(b=>b.onclick=()=>draw(b.dataset.cons));
+  draw('all');
+  quiz($('#q9'),BANK.q9);
+})();
+// s10 trilemma
+(function(){
+  const info={
+   sec:'<b>Security</b>: resistance to 51% attacks and double-spending. Bitcoin pays for this with lower throughput. Maximised by many validators and strong protocol assumptions.',
+   scale:'<b>Scalability</b>: high throughput and low latency. High-TPS chains often reduce validator count, which lowers decentralization. Layer 2 and sharding help.',
+   dec:'<b>Decentralization</b>: control spread across many independent participants. Bitcoin and Ethereum favour it, at a cost to speed.'};
+  $$('.tri').forEach(g=>g.onclick=()=>{$('#triOut').innerHTML='<p>'+info[g.dataset.k]+'</p>';});
+  quiz($('#q10'),BANK.q10);
+})();
+// s11 halving
+(function(){
+  function render(){
+    const e=+$('#eraSlider').value; $('#eraVal').textContent=e;
+    const reward=50/Math.pow(2,e);
+    const mined=210000*50*(2-1/Math.pow(2,e));
+    $('#eraOut').textContent='Era '+e+' (year approx. '+(2009+4*e)+'): reward '+reward+' BTC per block. Cumulative supply after this era: '+mined.toLocaleString()+' BTC.';
+  }
+  $('#eraSlider').oninput=render; render();
+})();
+// s12 UTXO
+(function(){
+  const SAT=1e8;
+  function toSat(x){return Math.round(parseFloat(x)*SAT);}
+  function render(){
+    const inp=toSat($('#utIn').value)||0, pay=toSat($('#utPay').value)||0, fee=toSat($('#utFee').value)||0;
+    const change=inp-pay-fee;
+    const ok=change>=0;
+    $('#utxoDiag').innerHTML=
+      '<div class="box"><b>Input UTXO</b>'+(inp/SAT).toFixed(8)+' BTC</div><div class="arrow">→</div>'+
+      '<div class="stack" style="margin:0"><div class="box green"><b>To Bob</b>'+(pay/SAT).toFixed(8)+' BTC</div>'+
+      '<div class="box amber"><b>Change to Alice</b>'+(ok?(change/SAT).toFixed(8):'invalid')+' BTC</div>'+
+      '<div class="box grey"><b>Miner fee</b>'+(fee/SAT).toFixed(8)+' BTC</div></div>';
+    $('#utxoMsg').innerHTML= ok ? '<b>Valid.</b> Outputs + fee = input.' : '<b style="color:var(--red)">Invalid: outputs exceed the input.</b>';
+  }
+  ['#utIn','#utPay','#utFee'].forEach(s=>$(s).oninput=render); render();
+  quiz($('#q12'),BANK.q12);
+})();
+stepper($('#stepTx'),[
+ {t:'1. Create',d:'The wallet selects UTXOs as inputs, sets the recipient and amount, adds a change output, and considers the fee.'},
+ {t:'2. Sign',d:'The sender signs with the private key, proving they can spend the selected UTXOs.'},
+ {t:'3. Broadcast',d:'The signed transaction is sent to the network. Nodes pick it up and spread it.'},
+ {t:'4. Mempool',d:'The verified but unconfirmed transaction waits in the memory pool until a miner picks it.'},
+ {t:'5. Validation by nodes',d:'Every full node checks three things: (1) each input is unspent, which prevents double-spending; (2) total inputs are at least total outputs, so no coins are created; (3) the ScriptSig unlocks the previous ScriptPubKey. Source: Mastering Bitcoin, Chapter 5/6; Programming Bitcoin, Chapter 7.'},
+ {t:'6. Mining',d:'A miner builds a candidate block, performs Proof of Work, and broadcasts a valid block. Other nodes verify it.'},
+ {t:'7. Confirmation',d:'The transaction is included in a valid block and joins the blockchain.'}
+]);
+stepper($('#stepScript'),[
+ {t:'Push signature',d:'The ScriptSig pushes the signature onto the stack.',v:'<div class="mono">Stack (top first): &lt;signature&gt;</div>'},
+ {t:'Push public key',d:'The ScriptSig pushes the public key.',v:'<div class="mono">&lt;pubKey&gt;, &lt;signature&gt;</div>'},
+ {t:'OP_DUP',d:'Duplicates the public key on top.',v:'<div class="mono">&lt;pubKey&gt;, &lt;pubKey&gt;, &lt;signature&gt;</div>'},
+ {t:'OP_HASH160',d:'Hashes the top item: RIPEMD-160(SHA-256(pubKey)).',v:'<div class="mono">HASH160(&lt;pubKey&gt;), &lt;pubKey&gt;, &lt;signature&gt;</div>'},
+ {t:'Push pubKeyHash',d:'The ScriptPubKey pushes the expected hash from the locked output.',v:'<div class="mono">&lt;pubKeyHash&gt;, HASH160(&lt;pubKey&gt;), &lt;pubKey&gt;, &lt;signature&gt;</div>'},
+ {t:'OP_EQUALVERIFY',d:'Pops two items and checks they are equal. Fails immediately if not.',v:'<div class="mono">&lt;pubKey&gt;, &lt;signature&gt;</div>'},
+ {t:'OP_CHECKSIG',d:'Verifies the signature against the transaction data and public key. Leaves TRUE if valid.',v:'<div class="mono">TRUE</div>'}
+]);
+quiz($('#q14'),BANK.q14);
+// s15 gas
+(function(){
+  function render(){
+    const g=parseFloat($('#gasUsed').value)||0, p=parseFloat($('#gasPrice').value)||0, usd=parseFloat($('#ethUsd').value)||0;
+    const gwei=g*p, eth=gwei/1e9;
+    $('#gasOut').innerHTML='Fee = '+g.toLocaleString()+' × '+p+' gwei = '+gwei.toLocaleString()+' gwei = <b>'+eth.toFixed(6)+' ETH</b>'+(usd?' ≈ <b>'+money(eth*usd)+'</b>':'');
+  }
+  ['#gasUsed','#gasPrice','#ethUsd'].forEach(s=>$(s).oninput=render); render();
+})();
+quiz($('#q16'),BANK.q16);
+// s16 done above
+// s17 Solidity
+flash($('#flashSol'),FLASH.sol);
+quiz($('#q17'),BANK.q17);
+// s18 DApp
+(function(){
+  const L=[
+   ['Presentation layer','Frontend UI (HTML, CSS, React). Uses IPFS for files and The Graph for queries.'],
+   ['Wallet and identity layer','MetaMask holds private keys, identifies the user by address, and signs transactions.'],
+   ['Communication layer','Ethers.js or Web3.js converts function calls into JSON-RPC requests sent to a node (Infura, Alchemy, or local).'],
+   ['Smart contract layer','Solidity business logic, executed by the EVM on every node.'],
+   ['Blockchain layer','The ledger and consensus that orders transactions into blocks. Ethereum or a Layer 2 network.']
+  ];
+  const wrap=$('#dappLayers');
+  L.forEach((l,i)=>{const b=document.createElement('div');b.className='box';b.style.cursor='pointer';b.style.width='100%';b.innerHTML='<b>'+(i+1)+'. '+l[0]+'</b>';b.onclick=()=>{$$('.box',wrap).forEach(x=>x.classList.remove('hl'));b.classList.add('hl');$('#dappInfo').innerHTML='<p><b>'+l[0]+':</b> '+l[1]+'</p><p class="small">Off-chain services (IPFS, The Graph, Chainlink oracles) support these layers. Reads go straight to a node and cost no gas; writes go through the wallet and cost gas.</p>';};wrap.appendChild(b);});
+})();
+// s19 deployment and ERC
+stepper($('#stepDeploy'),[
+ {t:'Write',d:'Write the Solidity contract (for example Message with a constructor and setMessage).'},
+ {t:'Compile',d:'The compiler outputs bytecode (run by the EVM, stored on-chain) and the ABI (used by the frontend).'},
+ {t:'Deploy',d:'Deploy through MetaMask, connected to Ganache (RPC http://127.0.0.1:7545, Chain ID usually 1337).'},
+ {t:'Confirm',d:'The blockchain gives the contract a unique address, such as 0x5B38...ddC4.'},
+ {t:'Interact',d:'In Remix, read functions (blue) are free. Write functions (orange) need gas and MetaMask approval.'}
+]);
+stepper($('#stepERC'),[
+ {t:'Alice approves',d:'Alice calls approve(DEX, 50). The token contract sets allowance[Alice][DEX] = 50.'},
+ {t:'DEX swaps',d:'The DEX calls transferFrom(Alice, DEX, 50) during a swap.'},
+ {t:'Tokens move',d:'50 tokens move from Alice to the DEX. The DEX cannot take more than the approved amount.'}
+]);
+quiz($('#q19'),BANK.q19);
+// s20 layer 2
+(function(){
+  let off=0;
+  function render(){$('#chOn').textContent=off>0?2:0;$('#chOff').textContent=off;$('#chMsg').textContent=off===0?'Open the channel: 1 on-chain transaction.':(off>=100?'100 payments done. Closing the channel adds 1 on-chain transaction. Total on-chain: 2.':'Off-chain payments cost no gas. Only the opening and closing are on-chain.');}
+  $('#chStep').onclick=()=>{ if(off<100) off++; render(); };
+  $('#chReset').onclick=()=>{off=0;render();};
+  render();
+  quiz($('#q20'),BANK.q20);
+})();
+// s21 bridge
+stepper($('#stepBridge'),[
+ {t:'Lock',d:'The user locks an asset (for example 10 ETH) in the bridge contract on Chain A.'},
+ {t:'Verify',d:'The bridge mechanism verifies the lock event: via trusted custodian, validators, or a light client or ZK proof.'},
+ {t:'Mint',d:'A wrapped token (for example wrapped ETH) is minted on Chain B.'},
+ {t:'Use',d:'The user uses the wrapped asset on Chain B.'},
+ {t:'Return',d:'The wrapped token is burned on Chain B and the original is released on Chain A.'}
+]);
+quiz($('#q21'),BANK.q21);
+// s22 cave
+(function(){
+  let lastRounds=0;
+  function run(cheat){
+    const R=+$('#rRange').value; let out=[], pass=0, stopped=false;
+    for(let r=1;r<=R;r++){
+      const pick=Math.random()<0.5?'A':'B', call=Math.random()<0.5?'A':'B';
+      let ok;
+      if(!cheat) ok=true; // knows the word: can always exit requested path
+      else ok = (pick===call); // cheater without the word passes only when the guessed path matches Victor's call (50%)
+      out.push(r+': '+(ok?'✓':'✗'));
+      if(!ok){stopped=true;break;}
+      pass++;
+    }
+    $('#caveOut').textContent=(cheat?'Cheater ':'Honest prover ')+(stopped?'FAILED':'passed all rounds')+'\n'+out.join('  ');
+    const p=Math.pow(0.5,pass);
+    $('#caveProb').textContent='Chance of passing '+pass+' rounds by luck: (1/2)^'+pass+' = '+p.toExponential(2)+'.';
+  }
+  $('#rRange').oninput=()=>{$('#rVal').textContent=$('#rRange').value; const p=Math.pow(0.5,+$('#rRange').value); $('#caveProb').textContent='Cheating chance over '+$('#rRange').value+' rounds: (1/2)^'+$('#rRange').value+' = '+p.toExponential(2)+'.';};
+  $('#caveKnow').onclick=()=>run(false);
+  $('#caveCheat').onclick=()=>run(true);
+  quiz($('#q22'),BANK.q22);
+})();
+// s23 DID
+(function(){
+  const info={
+   issuer:'<b>Issuer:</b> the university verifies the qualification, signs the credential, and registers its DID and public key in the registry.',
+   holder:'<b>Holder:</b> the student stores the signed Verifiable Credential in a digital wallet and decides what to present (selective disclosure, for example "over 18" without a date of birth).',
+   verifier:'<b>Verifier:</b> the employer resolves the issuer\'s DID for the public key, checks the signature, and checks revocation status.'};
+  $$('[data-who]').forEach(b=>b.onclick=()=>{$$('[data-who]').forEach(x=>x.classList.remove('hl'));b.classList.add('hl');$('#didInfo').innerHTML='<p>'+info[b.dataset.who]+'</p>';});
+  quiz($('#q23'),BANK.q23);
+})();
+// s24 Fabric
+stepper($('#stepFabric'),[
+ {t:'1. Request',d:'The university app asks for a certificate to be issued.'},
+ {t:'2. Proposal',d:'The Fabric Gateway sends the proposal to the required endorsing peers.'},
+ {t:'3. Execution',d:'Endorsing peers run the chaincode in simulation and produce a read/write set.'},
+ {t:'4. Endorsement',d:'Peers sign their responses. The endorsement policy must be satisfied.'},
+ {t:'5. Ordering',d:'The ordering service places the endorsed transaction into a block.'},
+ {t:'6. Distribution',d:'The block is delivered to the channel\'s peers.'},
+ {t:'7. Validation',d:'Each peer checks endorsements and that data read has not changed.'},
+ {t:'8. Commitment',d:'Block appended. Valid transactions update the world state. Invalid ones stay in the block but change nothing.'},
+ {t:'9. Response',d:'The application receives the commit status.'}
+]);
+quiz($('#q24'),BANK.q24);
+// s25 chaincode
+stepper($('#stepCC'),[
+ {t:'1. Package',d:'Prepare the chaincode package.'},
+ {t:'2. Install',d:'Install on the relevant peers.'},
+ {t:'3. Approve',d:'Each required organisation approves the chaincode definition.'},
+ {t:'4. Commit',d:'Commit the definition to the channel. Steps 1–4 happen once.'},
+ {t:'5. Invoke',d:'Applications submit transactions that call its functions. Happens on every use.'},
+ {t:'6. Validate and commit',d:'Peers validate ordered transactions and update the ledger when valid.'}
+]);
+quiz($('#q25'),BANK.q25);
+// s26 BaaS
+(function(){
+  const self=[['Blockchain application','you'],['Chaincode','you'],['Peers and ordering nodes','you'],['Servers and storage','you'],['Monitoring and backups','you']];
+  const baas=[['Blockchain application','you'],['Chaincode','you'],['Peers and ordering nodes','cloud provider'],['Servers and storage','cloud provider'],['Monitoring and backups','cloud provider']];
+  function draw(mode){
+    const list= mode==='baas'?baas:self;
+    $('#stackBox').innerHTML=list.map(x=>'<div class="box '+(x[1]==='you'?'amber':'green')+'"><b>'+x[0]+'</b> managed by: '+x[1]+'</div>').join('');
+  }
+  $('#toggleStack').onclick=()=>draw('self');
+  $('#toggleBaas').onclick=()=>draw('baas');
+  draw('self');
+})();
+// s27 federated
+stepper($('#stepFed'),[
+ {t:'1. Global model sent',d:'The aggregation server sends the shared model to every hospital.'},
+ {t:'2. Local training',d:'Each hospital trains on its own patient data. Raw data never leaves the hospital.'},
+ {t:'3. Updates returned',d:'Each hospital returns only model updates.'},
+ {t:'4. Aggregation and recording',d:'The server combines updates into an improved model. The blockchain records participation, update hashes, model versions and the aggregation event.'},
+ {t:'Repeat',d:'Steps 1–4 repeat for many rounds. Limitations: updates can leak information, and a malicious hospital can poison the model.'}
+]);
+quiz($('#q27'),BANK.q27);
+// s28
+quiz($('#q28'),BANK.q28);
+// s29
+stepper($('#stepSupply'),[
+ {t:'Farmer',d:'Produces milk and registers the batch on the ledger.'},
+ {t:'Collection centre',d:'Records quantity, quality and collection time.'},
+ {t:'Processing unit',d:'Records processing and packaging details.'},
+ {t:'Transport',d:'Records dispatch and delivery.'},
+ {t:'Retailer',d:'Records arrival in store.'},
+ {t:'Customer',d:'Scans a QR code and views the full history. The chain records what was reported, not whether the physical product matches.'}
+]);
+stepper($('#stepHealth'),[
+ {t:'Create record',d:'Hospital A creates the patient record and stores the full record in a secure off-chain database.'},
+ {t:'Hash',d:'A cryptographic hash of the record is generated.'},
+ {t:'Anchor on-chain',d:'Only the hash, consent information and access permissions go on-chain.'},
+ {t:'Consent',d:'The patient authorises Hospital B. Revocation is also recorded on-chain.'},
+ {t:'Access',d:'Hospital B requests the record, verifies the hash, and fetches it only if authorised. The access event is logged.'}
+]);
+quiz($('#q29'),BANK.q29);
+// s30
+flash($('#flashTrends'),FLASH.trends);
+
+// s31 mixed bank
+(function(){
+  function draw(){
+    const all=allQs(); const pick=[]; const used=new Set();
+    while(pick.length<Math.min(10,all.length)){const i=Math.floor(Math.random()*all.length); if(!used.has(i)){used.add(i);pick.push(all[i]);}}
+    quiz($('#mixBox'), pick);
+  }
+  $('#mixNew').onclick=draw; draw();
+})();
+
+// ---------- progress tracking (in memory only) ----------
+const secs=$$('section.sec');
+function updProg(){
+  const boxes=$$('input.done');
+  const done=boxes.filter(c=>c.checked).length;
+  $('#progTxt').textContent=done+' / '+boxes.length;
+  $('#progBar').style.width=(boxes.length? done/boxes.length*100 : 0)+'%';
+}
+$$('input.done').forEach(c=>c.onchange=updProg);
+updProg();
+
+// ---------- region (currency) and search ----------
+var REGION='intl', FX=85;
+function money(usd){
+  if(REGION==='in'){
+    const r=usd*FX;
+    if(r>=1e7) return '₹'+(r/1e7).toLocaleString('en-IN',{maximumFractionDigits:0})+' crore';
+    return '₹'+r.toLocaleString('en-IN',{maximumFractionDigits:2});
+  }
+  return '$'+usd.toLocaleString('en-US',{maximumFractionDigits:2});
+}
+function applyRegion(){
+  $$('.usd').forEach(sp=>sp.textContent=money(+sp.dataset.usd));
+  const g=$('#gasUsed'); if(g) g.dispatchEvent(new Event('input'));
+}
+$('#region').onchange=e=>{REGION=e.target.value; applyRegion();};
+$('#fx').oninput=e=>{const v=parseFloat(e.target.value); if(v>0){FX=v; applyRegion();}};
+$('#search').oninput=e=>{
+  const q=e.target.value.toLowerCase().trim();
+  $$('section.sec').forEach(sec=>{sec.style.display=(!q||sec.textContent.toLowerCase().includes(q))?'':'none';});
+};
+applyRegion();
+(function(){
+  const links=$$('aside a[href^="#"]');
+  const map={}; links.forEach(a=>map[a.getAttribute('href').slice(1)]=a);
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting && map[en.target.id]){
+        links.forEach(a=>a.classList.remove('active'));
+        map[en.target.id].classList.add('active');
+        map[en.target.id].scrollIntoView({block:'nearest'});
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  $$('section.sec, header.hero').forEach(el=>io.observe(el));
+})();
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
